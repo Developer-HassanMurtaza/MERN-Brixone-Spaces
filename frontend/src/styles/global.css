@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Afacad", sans-serif;
+}
+
+html,
+body {
+  font-family: "Afacad", sans-serif;
+}
+
+.auth-bg {
+  background-image: url("/assets/images/house-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5%;
+}
+
+.auth-card-wrapper {
+  max-width: 420px;
+}
+
+/* Base responsive helpers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+/* OTP input responsiveness */
+.otp-container {
+  display: flex;
+  gap: 12px;
+}
+
+.otp-input {
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  font-size: 18px;
+}
+
+@media (max-width: 480px) {
+  .otp-container {
+    gap: 8px;
+  }
+  .otp-input {
+    width: 40px;
+    height: 44px;
+    font-size: 16px;
+  }
+}
