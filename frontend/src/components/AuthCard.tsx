@@ -1,27 +1,42 @@
-import { Card } from "antd";
+import type { ReactNode } from "react";
+import { Card, CardHeader, CardContent, Typography } from "@mui/material";
 
-interface AuthCardProps {
-  children: React.ReactNode;
-  title?: string;
-}
+type AuthCardProps = {
+  children: ReactNode;
+  title: string;
+  description: string;
+};
 
-export default function AuthCard({ children, title }: AuthCardProps) {
+export default function AuthCard({
+  children,
+  title,
+  description,
+}: AuthCardProps) {
   return (
     <Card
-      title={
-        title ? (
-          <span style={{ fontSize: 22, fontWeight: 600 }}>{title}</span>
-        ) : undefined
-      }
-      style={{ width: "100%", maxWidth: 549, borderRadius: 15 }}
-      styles={{
-        body: { padding: "0px 24px 24px 24px" },
-        header: {
-          borderBottom: "none",
-        },
+      sx={{
+        width: "100%",
+        maxWidth: 549,
+        borderRadius: "15px",
+        py: "37px",
+        px: "28px",
+        mx: { xs: "20px", md: "60px" },
       }}
     >
-      {children}
+      <CardHeader
+        sx={{ p: 0 }}
+        title={
+          <Typography sx={{ boxSizing: "border-box" }} variant="h6">
+            {title}
+          </Typography>
+        }
+        subheader={
+          <Typography sx={{ boxSizing: "border-box" }} variant="body2">
+            {description}
+          </Typography>
+        }
+      />
+      <CardContent>{children}</CardContent>
     </Card>
   );
 }

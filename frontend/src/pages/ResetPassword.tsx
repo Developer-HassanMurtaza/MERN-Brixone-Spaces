@@ -1,28 +1,43 @@
-import { Button, Form, Typography } from "antd";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthCard from "../components/AuthCard";
-import AuthLayout from "../layouts/AuthLayout";
-import PasswordField from "../components/PasswordField";
+import AuthLayout from "../layouts/AuthLayout/AuthLayout";
+import InputField from "../components/InputField";
 
 export default function ResetPassword() {
   return (
     <AuthLayout>
       <AuthCard title="Create New Password">
-        <Typography.Text>
+        <Typography variant="body2">
           Your new password must be different from previously used password.
-        </Typography.Text>
-        <Form layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item name="newPassword">
-            <PasswordField placeholder="Enter your new password" />
-          </Form.Item>
-          <Form.Item name="confirmNewPassword">
-            <PasswordField placeholder="Confirm your new password" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" block size="large">
+        </Typography>
+        <Box sx={{ mt: 2 }}>
+          <Stack spacing={2}>
+            {[
+              {
+                name: "newPassword",
+                label: "New Password",
+                placeholder: "Enter your new password",
+                type: "password",
+              },
+              {
+                name: "confirmNewPassword",
+                label: "Confirm New Password",
+                placeholder: "Confirm your new password",
+                type: "password",
+              },
+            ].map((f) => (
+              <InputField
+                key={f.name}
+                label={f.label}
+                placeholder={f.placeholder}
+                type={f.type}
+              />
+            ))}
+            <Button variant="contained" size="large" fullWidth>
               Save New Password
             </Button>
-          </Form.Item>
-        </Form>
+          </Stack>
+        </Box>
       </AuthCard>
     </AuthLayout>
   );

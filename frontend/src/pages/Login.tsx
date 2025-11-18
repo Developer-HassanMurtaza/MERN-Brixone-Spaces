@@ -1,37 +1,66 @@
-import { Button, Form, Typography, Checkbox } from "antd";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import InputField from "../components/InputField";
 import AuthCard from "../components/AuthCard";
 import { Link } from "react-router-dom";
-import AuthLayout from "../layouts/AuthLayout";
-import PasswordField from "../components/PasswordField";
+import AuthLayout from "../layouts/AuthLayout/AuthLayout";
 
 export default function Login() {
+  const fields = [
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Enter your email",
+      type: "email",
+    },
+    {
+      name: "password",
+      label: "Password",
+      placeholder: "Enter your password",
+      type: "password",
+    },
+  ];
+
   return (
     <AuthLayout>
-      <AuthCard title="Sign In">
-        <Typography.Text>Welcome! Please enter your details</Typography.Text>
-        <Form layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item name="email">
-            <InputField placeholder="Enter your email" type="email" />
-          </Form.Item>
-          <Form.Item name="password">
-            <PasswordField placeholder="Enter your password" />
-          </Form.Item>
-          <Form.Item>
-            <Checkbox>Remember me</Checkbox>
-            <Link style={{ float: "right" }} to="/forgot-password">
-              Forgot Password?
-            </Link>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" block size="large">
+      <AuthCard
+        title="Sign In"
+        description="Welcome! Please enter your details"
+      >
+        <Box sx={{ mt: 2 }}>
+          <Stack>
+            {fields.map((field) => (
+              <InputField
+                key={field.name}
+                label={field.label}
+                placeholder={field.placeholder}
+                type={field.type}
+              />
+            ))}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <FormControlLabel control={<Checkbox />} label="Remember me" />
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </Box>
+            <Button variant="contained" size="large" fullWidth>
               Log In
             </Button>
-          </Form.Item>
-        </Form>
-        <Typography.Paragraph style={{ textAlign: "center" }}>
+          </Stack>
+        </Box>
+        <Typography sx={{ textAlign: "center", mt: 2 }}>
           Don’t have an account? <Link to="/signup">Sign Up</Link>
-        </Typography.Paragraph>
+        </Typography>
       </AuthCard>
     </AuthLayout>
   );

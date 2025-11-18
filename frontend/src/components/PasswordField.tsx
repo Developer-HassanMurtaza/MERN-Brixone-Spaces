@@ -1,12 +1,13 @@
-import { Input } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { useState } from "react";
+import type { ReactNode, ChangeEvent } from "react";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 
-interface PasswordFieldProps {
+type PasswordFieldProps = {
   placeholder: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+};
 
 export default function PasswordField({
   placeholder,
@@ -14,16 +15,37 @@ export default function PasswordField({
   value,
   onChange,
 }: PasswordFieldProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <Input.Password
-      size="large"
+    <TextField
+      fullWidth
       placeholder={placeholder}
-      prefix={icon}
+      type={showPassword ? "text" : "password"}
       value={value}
       onChange={onChange}
-      iconRender={(visible) =>
-        visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-      }
+      sx={{
+        "& .MuiInputBase-input::placeholder": {
+          color: "#676767",
+          opacity: 1,
+        },
+      }}
+      InputProps={{
+        startAdornment: icon ? (
+          <InputAdornment position="start">{icon}</InputAdornment>
+        ) : undefined,
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={() => setShowPassword((s) => !s)}
+              edge="end"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
     />
   );
 }

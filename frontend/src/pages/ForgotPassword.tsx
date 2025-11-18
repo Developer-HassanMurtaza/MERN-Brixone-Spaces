@@ -1,25 +1,23 @@
-import { Button, Form, Typography } from "antd";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import InputField from "../components/InputField";
 import AuthCard from "../components/AuthCard";
-import AuthLayout from "../layouts/AuthLayout";
+import AuthLayout from "../layouts/AuthLayout/AuthLayout";
 
 export default function ForgotPassword() {
   return (
     <AuthLayout>
       <AuthCard title="Forgot Password">
-        <Typography.Text>
-          Please enter your email address to receive a verification code.{" "}
-        </Typography.Text>
-        <Form layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item name="email">
-            <InputField placeholder="Enter your email" type="email" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" block size="large">
+        <Typography variant="body2">
+          Please enter your email address to receive a verification code.
+        </Typography>
+        <Box sx={{ mt: 2 }}>
+          <Stack spacing={2}>
+            <InputField label="Email" placeholder="Enter your email" type="email" />
+            <Button variant="contained" size="large" fullWidth>
               Send
             </Button>
-          </Form.Item>
-        </Form>
+          </Stack>
+        </Box>
       </AuthCard>
     </AuthLayout>
   );

@@ -1,12 +1,14 @@
-import { Input } from "antd";
+import type { ReactNode, ChangeEvent } from "react";
+import { Box, TextField, InputAdornment, Typography } from "@mui/material";
 
-interface InputFieldProps {
+type InputFieldProps = {
   placeholder: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   type?: string;
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+};
 
 export default function InputField({
   placeholder,
@@ -14,15 +16,31 @@ export default function InputField({
   type,
   value,
   onChange,
+  label,
 }: InputFieldProps) {
   return (
-    <Input
-      size="large"
-      placeholder={placeholder}
-      prefix={icon}
-      type={type || ""}
-      value={value}
-      onChange={onChange}
-    />
+    <Box sx={{ width: "100%" }}>
+      <Typography sx={{ mb: 1, fontWeight: 600, fontSize: 14 }}>
+        {label ?? placeholder}
+      </Typography>
+      <TextField
+        fullWidth
+        placeholder={placeholder}
+        type={type || "text"}
+        value={value}
+        onChange={onChange}
+        sx={{
+          "& .MuiInputBase-input::placeholder": {
+            color: "#676767",
+            opacity: 1,
+          },
+        }}
+        InputProps={{
+          startAdornment: icon ? (
+            <InputAdornment position="start">{icon}</InputAdornment>
+          ) : undefined,
+        }}
+      />
+    </Box>
   );
 }
