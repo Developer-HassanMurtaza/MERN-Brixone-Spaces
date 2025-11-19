@@ -1,7 +1,7 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthCard from "../components/AuthCard";
 import AuthLayout from "../layouts/AuthLayout/AuthLayout";
-import InputField from "../components/InputField";
+import InputField from "../components/CustomMuiTextField";
 
 export default function ResetPassword() {
   return (

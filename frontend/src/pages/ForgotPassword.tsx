@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import InputField from "../components/InputField";
+import InputField from "../components/CustomMuiTextField";
 import AuthCard from "../components/AuthCard";
 import AuthLayout from "../layouts/AuthLayout/AuthLayout";
 
@@ -12,7 +12,11 @@ export default function ForgotPassword() {
         </Typography>
         <Box sx={{ mt: 2 }}>
           <Stack spacing={2}>
-            <InputField label="Email" placeholder="Enter your email" type="email" />
+            <InputField
+              label="Email"
+              placeholder="Enter your email"
+              type="email"
+            />
             <Button variant="contained" size="large" fullWidth>
               Send
             </Button>

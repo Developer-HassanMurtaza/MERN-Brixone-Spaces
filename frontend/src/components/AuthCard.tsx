@@ -24,19 +24,34 @@ export default function AuthCard({
       }}
     >
       <CardHeader
-        sx={{ p: 0 }}
+        sx={{ p: 0, mb: "20px" }}
         title={
-          <Typography sx={{ boxSizing: "border-box" }} variant="h6">
+          <Typography
+            sx={{ boxSizing: "border-box", fontWeight: "bold" }}
+            variant="h6"
+          >
             {title}
           </Typography>
         }
         subheader={
-          <Typography sx={{ boxSizing: "border-box" }} variant="body2">
+          <Typography
+            sx={{ boxSizing: "border-box", color: "gray" }}
+            variant="body2"
+          >
             {description}
           </Typography>
         }
       />
-      <CardContent>{children}</CardContent>
+      <CardContent
+        sx={{
+          p: 0,
+          "&:last-child": {
+            paddingBottom: 0,
+          },
+        }}
+      >
+        {children}
+      </CardContent>
     </Card>
   );
 }

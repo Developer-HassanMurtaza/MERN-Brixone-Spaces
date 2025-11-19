@@ -6,10 +6,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import InputField from "../components/InputField";
+import CustomMuiTextField from "../components/CustomMuiTextField";
 import AuthCard from "../components/AuthCard";
-import { Link } from "react-router-dom";
 import AuthLayout from "../layouts/AuthLayout/AuthLayout";
+import { CustomTextButton } from "../components/CustomTextButton";
 
 export default function Login() {
   const fields = [
@@ -24,6 +24,7 @@ export default function Login() {
       label: "Password",
       placeholder: "Enter your password",
       type: "password",
+      isPassword: true,
     },
   ];
 
@@ -33,33 +34,55 @@ export default function Login() {
         title="Sign In"
         description="Welcome! Please enter your details"
       >
-        <Box sx={{ mt: 2 }}>
+        <Box>
           <Stack>
             {fields.map((field) => (
-              <InputField
+              <CustomMuiTextField
                 key={field.name}
                 label={field.label}
                 placeholder={field.placeholder}
                 type={field.type}
+                isPassword={field?.isPassword ? true : false}
               />
             ))}
             <Box
               sx={{
+                p: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
               }}
             >
-              <FormControlLabel control={<Checkbox />} label="Remember me" />
-              <Link to="/forgot-password">Forgot Password?</Link>
+              <FormControlLabel
+                sx={{
+                  p: 0,
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                    lineHeight: { xs: 1, sm: 1.5 },
+                    whiteSpace: "normal",
+                  },
+                }}
+                control={<Checkbox />}
+                label="Remember me"
+              />
+              <CustomTextButton
+                title="Forgot Password?"
+                navigateTo="/forgot-password"
+              />
             </Box>
-            <Button variant="contained" size="large" fullWidth>
+            <Button
+              sx={{ mt: "40px", mb: "30px", textTransform: "capitalize" }}
+              variant="contained"
+              size="large"
+              fullWidth
+            >
               Log In
             </Button>
           </Stack>
         </Box>
-        <Typography sx={{ textAlign: "center", mt: 2 }}>
-          Don’t have an account? <Link to="/signup">Sign Up</Link>
+        <Typography sx={{ textAlign: "center" }}>
+          Don’t have an account?
+          <CustomTextButton title="Sign Up" navigateTo="/register" />
         </Typography>
       </AuthCard>
     </AuthLayout>

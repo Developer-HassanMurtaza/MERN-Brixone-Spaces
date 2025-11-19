@@ -21,21 +21,21 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     >
       <Grid container sx={{ minHeight: "100vh" }}>
         <Grid
-          size={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             alignItems: "center",
-            paddingLeft: { xs: "16px", md: "60px" },
-          }}
+            paddingLeft: { xs: "20px", md: "60px" },
+          }}  
         >
           <img src={logo} alt="logo" style={{ width: "30%" }} />
         </Grid>
         <Grid
-          size={6}
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             alignItems: "center",
-            // paddingLeft: { xs: "16px", md: "60px" },
+            justifyContent: "center",
           }}
         >
           {children}
