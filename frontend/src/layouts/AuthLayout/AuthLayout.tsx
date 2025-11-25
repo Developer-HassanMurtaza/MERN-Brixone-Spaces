@@ -12,21 +12,22 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     <Box
       sx={{
         width: "100%",
-        height: { xs: "auto", md: "100vh" },
+        height: "100vh",
+        overflow: "hidden",
         backgroundImage: `url(${houseBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <Grid container sx={{ minHeight: "100vh" }}>
+      <Grid container sx={{ height: "100%" }}>
         <Grid
           size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             alignItems: "center",
             paddingLeft: { xs: "20px", md: "60px" },
-          }}  
+          }}
         >
           <img src={logo} alt="logo" style={{ width: "30%" }} />
         </Grid>
@@ -36,6 +37,8 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            height: "100%",
+            overflow: "hidden",
           }}
         >
           {children}

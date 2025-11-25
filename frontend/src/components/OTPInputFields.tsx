@@ -1,19 +1,18 @@
 import React, { useMemo, useRef } from "react";
-import { Input } from "antd";
-import type { InputRef } from "antd";
+import TextField from "@mui/material/TextField";
 
-interface OtpInputProps {
+type OTPInputFieldsProps = {
   length?: number;
   value?: string;
   onChange?: (code: string) => void;
-}
+};
 
-export default function OtpInput({
+export const OTPInputFields = ({
   length = 6,
   value = "",
   onChange,
-}: OtpInputProps) {
-  const inputsRef = useRef<Array<InputRef | null>>([]);
+}: OTPInputFieldsProps) => {
+  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   const digits = useMemo(() => {
     const chars = value.split("").slice(0, length);
     while (chars.length < length) chars.push("");
@@ -35,14 +34,14 @@ export default function OtpInput({
     if (index < length - 1) focusAt(index + 1);
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number
+  ) {
     setDigitAt(index, e.target.value);
   }
 
-  function handleKeyDown(
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) {
+  function handleKeyDown(e: React.KeyboardEvent, index: number) {
     if (e.key === "Backspace") {
       if (digits[index]) {
         const nextValue = digits.map((d, i) => (i === index ? "" : d)).join("");
@@ -72,21 +71,18 @@ export default function OtpInput({
   return (
     <div className="otp-container">
       {digits.map((digit, index) => (
-        <Input
+        <TextField
           key={index}
           value={digit}
           onChange={(e) => handleChange(e, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
           onPaste={handlePaste}
-          inputMode="numeric"
-          maxLength={1}
-          size="large"
+          size="medium"
           className="otp-input"
-          ref={(el) => {
-            inputsRef.current[index] = el;
-          }}
+          inputRef={(el) => (inputsRef.current[index] = el)}
+          inputProps={{ inputMode: "numeric", maxLength: 1 }}
         />
       ))}
     </div>
   );
-}
+};

@@ -1,15 +1,12 @@
+import { Box, Checkbox, FormControlLabel, Stack } from "@mui/material";
 import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Stack,
-  Typography,
-} from "@mui/material";
-import CustomMuiTextField from "../components/CustomMuiTextField";
-import AuthCard from "../components/AuthCard";
-import AuthLayout from "../layouts/AuthLayout/AuthLayout";
-import { CustomTextButton } from "../components/CustomTextButton";
+  InputField,
+  AuthCard,
+  TextButton,
+  FilledButton,
+} from "../../components";
+import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
+import { AuthLinkPrompt } from "../../components/AuthLinkPrompt";
 
 export default function Login() {
   const fields = [
@@ -37,7 +34,7 @@ export default function Login() {
         <Box>
           <Stack>
             {fields.map((field) => (
-              <CustomMuiTextField
+              <InputField
                 key={field.name}
                 label={field.label}
                 placeholder={field.placeholder}
@@ -65,25 +62,19 @@ export default function Login() {
                 control={<Checkbox />}
                 label="Remember me"
               />
-              <CustomTextButton
+              <TextButton
                 title="Forgot Password?"
                 navigateTo="/forgot-password"
               />
             </Box>
-            <Button
-              sx={{ mt: "40px", mb: "30px", textTransform: "capitalize" }}
-              variant="contained"
-              size="large"
-              fullWidth
-            >
-              Log In
-            </Button>
+            <FilledButton title="Log In" onClick={() => {}} />
+            <AuthLinkPrompt
+              message="Don’t have an account?"
+              title="Sign Up"
+              navigateTo="/signup"
+            />
           </Stack>
         </Box>
-        <Typography sx={{ textAlign: "center" }}>
-          Don’t have an account?
-          <CustomTextButton title="Sign Up" navigateTo="/register" />
-        </Typography>
       </AuthCard>
     </AuthLayout>
   );

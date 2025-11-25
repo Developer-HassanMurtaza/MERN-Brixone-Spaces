@@ -20,7 +20,7 @@ type InputFieldProps = {
   isPassword?: boolean;
 };
 
-export default function CustomMuiTextField({
+export const InputField = ({
   placeholder,
   icon,
   type,
@@ -28,7 +28,7 @@ export default function CustomMuiTextField({
   onChange,
   label,
   isPassword = false,
-}: InputFieldProps) {
+}: InputFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -78,4 +78,4 @@ export default function CustomMuiTextField({
       />
     </Box>
   );
-}
+};

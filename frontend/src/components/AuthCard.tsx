@@ -7,11 +7,7 @@ type AuthCardProps = {
   description: string;
 };
 
-export default function AuthCard({
-  children,
-  title,
-  description,
-}: AuthCardProps) {
+export const AuthCard = ({ children, title, description }: AuthCardProps) => {
   return (
     <Card
       sx={{
@@ -45,6 +41,8 @@ export default function AuthCard({
       <CardContent
         sx={{
           p: 0,
+          maxHeight: "95vh",
+          overflowY: "auto",
           "&:last-child": {
             paddingBottom: 0,
           },
@@ -54,4 +52,4 @@ export default function AuthCard({
       </CardContent>
     </Card>
   );
-}
+};
