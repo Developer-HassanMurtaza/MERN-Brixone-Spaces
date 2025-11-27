@@ -2,32 +2,16 @@ import { User } from "../models/user.model.js";
 import { ROLES } from "../constants/index.js";
 import { asyncHandler, sendEmail, ApiResponse } from "../utils/index.js";
 import {
-  BadRequestException,
   ConflictException,
   NotFoundException,
   UnAuthorizedException,
 } from "../errors/index.js";
 
-const validateEmail = (email) => {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return emailRegex.test(email);
-};
-
 // ╔══════════════════╗
 // ║     Register     ║
 // ╚══════════════════╝
 export const register = asyncHandler(async (req, res) => {
-  const { fullName, email, password } = req.body;
-
-  if (!email) {
-    throw new BadRequestException("Email is required.");
-  }
-  if (!password) {
-    throw new BadRequestException("Password is required.");
-  }
-  if (!validateEmail(email)) {
-    throw new BadRequestException("Invalid email format.");
-  }
+  const { fullName, email, password, phoneNumber } = req.body;
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -38,11 +22,12 @@ export const register = asyncHandler(async (req, res) => {
     fullName,
     email,
     password,
+    phoneNumber: phoneNumber || "",
   });
 
   const accessToken = await newUser.createJWT();
 
-  const userResponse = newUser.toObject({ getters: true });
+  const userResponse = newUser.toObject();
   delete userResponse.password;
 
   return res.status(201).json(
@@ -54,38 +39,26 @@ export const register = asyncHandler(async (req, res) => {
   );
 });
 
-const loginSuccess = async (user, res, message) => {
-  const accessToken = await user.createJWT();
-
-  const userResponse = user.toObject({ getters: true });
-  delete userResponse.password;
-
-  return res.status(200).json(
-    new ApiResponse({
-      statusCode: 200,
-      message: message || "User logged in successfully.",
-      data: { user: userResponse, accessToken },
-    })
-  );
-};
-
 // ╔═══════════════╗
 // ║     Login     ║
 // ╚═══════════════╝
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email) {
-    throw new BadRequestException("Email is required.");
-  }
-  if (!password) {
-    throw new BadRequestException("Password is required.");
-  }
-
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     throw new NotFoundException("User with this email does not exist.");
+  }
+  if (user.isDeleted) {
+    throw new UnAuthorizedException(
+      "Your account has been deleted by admin. Please contact support."
+    );
+  }
+  if (user.isBlock) {
+    throw new UnAuthorizedException(
+      "Your account is blocked. Please contact support."
+    );
   }
   if (user.canRequestResendOTP && !user.canChangePassword) {
     throw new UnAuthorizedException(
@@ -98,7 +71,18 @@ export const login = asyncHandler(async (req, res) => {
     throw new UnAuthorizedException("Invalid email or password.");
   }
 
-  return await loginSuccess(user, res, "User logged in successfully.");
+  const accessToken = await user.createJWT();
+
+  const userResponse = user.toObject();
+  delete userResponse.password;
+
+  return res.status(200).json(
+    new ApiResponse({
+      statusCode: 200,
+      message: "User logged in successfully.",
+      data: { user: userResponse, accessToken },
+    })
+  );
 });
 
 // ╔════════════════════════════════════╗
@@ -111,6 +95,16 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
   if (!user) {
     throw new NotFoundException("User not found with this email.");
+  }
+  if (user.isDeleted) {
+    throw new UnAuthorizedException(
+      "Your account has been deleted by admin. Please contact support."
+    );
+  }
+  if (user.isBlock) {
+    throw new UnAuthorizedException(
+      "Your account is blocked. Please contact support."
+    );
   }
 
   if (user.role === ROLES.ADMIN) {
@@ -155,6 +149,16 @@ export const resendOtp = asyncHandler(async (req, res) => {
 
   if (!user) {
     throw new NotFoundException("User not found with this email.");
+  }
+  if (user.isDeleted) {
+    throw new UnAuthorizedException(
+      "Your account has been deleted by admin. Please contact support."
+    );
+  }
+  if (user.isBlock) {
+    throw new UnAuthorizedException(
+      "Your account is blocked. Please contact support."
+    );
   }
 
   if (user.role === ROLES.ADMIN) {
@@ -208,6 +212,16 @@ export const verifyOtp = asyncHandler(async (req, res) => {
       "Invalid or expired OTP, or incorrect email."
     );
   }
+  if (user.isDeleted) {
+    throw new UnAuthorizedException(
+      "Your account has been deleted by admin. Please contact support."
+    );
+  }
+  if (user.isBlock) {
+    throw new UnAuthorizedException(
+      "Your account is blocked. Please contact support."
+    );
+  }
 
   if (user.role === ROLES.ADMIN) {
     throw new UnAuthorizedException("This action is unavailable for admin.");
@@ -249,6 +263,16 @@ export const resetPassword = asyncHandler(async (req, res) => {
       "You cannot able to reset password, Follow forgot password process."
     );
   }
+  if (user.isDeleted) {
+    throw new UnAuthorizedException(
+      "Your account has been deleted by admin. Please contact support."
+    );
+  }
+  if (user.isBlock) {
+    throw new UnAuthorizedException(
+      "Your account is blocked. Please contact support."
+    );
+  }
 
   if (user.role === ROLES.ADMIN) {
     throw new UnAuthorizedException("This action is unavailable for admin.");
@@ -260,7 +284,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  const userResponse = user.toObject({ getters: true });
+  const userResponse = user.toObject();
   delete userResponse.password;
 
   return res.status(200).json(
@@ -325,7 +349,7 @@ export const editProfile = asyncHandler(async (req, res) => {
     runValidators: true,
   });
 
-  const userResponse = updatedUser.toObject({ getters: true });
+  const userResponse = updatedUser.toObject();
   delete userResponse.password;
   delete userResponse.passwordResetOTP;
   delete userResponse.passwordResetExpires;
@@ -345,10 +369,7 @@ export const editProfile = asyncHandler(async (req, res) => {
 export const getProfile = asyncHandler(async (req, res) => {
   const { loggedInUser } = req;
 
-  const userResponse = loggedInUser.toObject({
-    getters: true,
-    virtuals: false,
-  });
+  const userResponse = loggedInUser.toObject();
 
   delete userResponse.password;
   delete userResponse.passwordResetOTP;

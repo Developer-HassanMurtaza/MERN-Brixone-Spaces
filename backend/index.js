@@ -1,7 +1,5 @@
 import "dotenv/config";
-
 import http from "http";
-
 import { app } from "./src/app.js";
 import { connectDb } from "./src/config/db.config.js";
 import { createAdmin } from "./src/utils/index.js";

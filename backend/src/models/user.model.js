@@ -3,12 +3,21 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import { ROLES } from "../constants/index.js";
+import { Counter } from "./counter.model.js";
 
 // ╔═════════════════════╗
 // ║     User Schema     ║
 // ╚═════════════════════╝
 const UserSchema = new Schema(
   {
+    customId: {
+      type: Number,
+      unique: true,
+      index: true,
+      immutable: true,
+      min: [200, "Custom ID cannot be less than 200"],
+    },
+
     fullName: {
       type: String,
       trim: true,
@@ -73,15 +82,36 @@ const UserSchema = new Schema(
       type: Date,
       select: false,
     },
+
+    isBlock: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   { timestamps: true, versionKey: false }
 );
 
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║     Pre-Hook (Hash Password and Handle Password Requirement)     ║
-// ╚══════════════════════════════════════════════════════════════════╝
+UserSchema.set("id", false);
+UserSchema.set("toObject", { virtuals: false, getters: true });
+UserSchema.set("toJSON", { virtuals: false, getters: true });
+
+// ╔════════════════════════════════════════════════════════════════════════════╗
+// ║     Pre-Save Hook: Assign Incremental ID and Hash Password if Modified     ║
+// ╚════════════════════════════════════════════════════════════════════════════╝
 UserSchema.pre("save", async function (next) {
   try {
+    if (this.isNew && (this.customId === undefined || this.customId === null)) {
+      const nextId = await Counter.getNextSequence("users");
+      this.customId = nextId;
+    }
+
     if (this.isModified("password") && this.password) {
       try {
         const salt = await bcrypt.genSalt(10);

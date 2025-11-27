@@ -1,8 +1,10 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import { router } from "./routes/index.js";
 import { routeNotFound, errorHandler } from "./middlewares/index.js";
+import { swaggerSpec } from "./config/swagger.config.js";
 // ╔═══════════════════════════════════╗
 // ║     Create "Express" Instance     ║
 // ╚═══════════════════════════════════╝
@@ -23,10 +25,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static("public"));
 
+// ╔═══════════════════════════════════════╗
+// ║     Swagger (only in development)     ║
+// ╚═══════════════════════════════════════╝
+if (process.env.NODE_ENV === "development") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
+
 // ╔═══════════════════════╗
 // ║     Testing Route     ║
 // ╚═══════════════════════╝
-app.route("/").get((req, res) => {
+app.route("/").get((_req, res) => {
   res.setHeader(
     "Cache-Control",
     "no-store, no-cache, must-revalidate, proxy-revalidate"

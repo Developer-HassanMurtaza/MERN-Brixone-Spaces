@@ -5,3 +5,4 @@ export * from "./trimBodyObject.middleware.js";
 export * from "./upload.middleware.js";
 export * from "./errorHandler.middleware.js";
 export * from "./routeNotFound.middleware.js";
+export * from "./adminAuth.middleware.js";

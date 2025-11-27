@@ -45,6 +45,18 @@ export const loginAuth = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (user.isDeleted) {
+    throw new ForbiddenException(
+      "Your account has been deleted by admin. Please contact support team."
+    );
+  }
+
+  if (user.isBlock) {
+    throw new ForbiddenException(
+      "Your account is blocked. Please contact support team."
+    );
+  }
+
   req.userId = user._id;
   req.loggedInUser = user;
 

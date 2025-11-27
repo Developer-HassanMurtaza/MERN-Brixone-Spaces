@@ -1,2 +1,10 @@
 export * from "./auth.controller.js";
- 
+export * from "./testimonial.controller.js";
+export * from "./user.controller.js";
+export * from "./propertyFeature.controller.js";
+export * from "./property.controller.js";
+export * from "./tour.controller.js";
+export * from "./dashboard.controller.js";
+export * from "./contactUs.controller.js";
+export * from "./member.controller.js";
+export * from "./invest.controller.js";
