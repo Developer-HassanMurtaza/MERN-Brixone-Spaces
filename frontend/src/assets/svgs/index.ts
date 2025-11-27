@@ -1,0 +1,10 @@
+export { default as MenuIcon } from "./MenuIcon.svg";
+export { default as BrixoneBlueLogo } from "./BrixoneBlueLogo.svg";
+export { default as FacebookIcon } from "./FacebookIcon.svg";
+export { default as InstagramIcon } from "./Instagram.svg";
+export { default as LinkedIn } from "./LinkedIn.svg";
+export { default as MailIcon } from "./MailIcon.svg";
+export { default as MapIcon } from "./MapIcon.svg";
+export { default as PhoneIcon } from "./PhoneIcon.svg";
+export { default as XIcon } from "./TwitterNewIcon.svg";
+export { default as SendIcon } from "./SendIcon.svg";
