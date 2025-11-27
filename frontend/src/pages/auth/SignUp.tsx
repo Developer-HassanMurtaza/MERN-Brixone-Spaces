@@ -65,7 +65,7 @@ export default function SignUp() {
         </Box>
         <Typography sx={{ textAlign: "center" }}>
           Already have an account?
-          <TextButton title="Sign In" navigateTo="/login" />
+          <TextButton title="Sign In" navigateTo="/" />
         </Typography>
       </AuthCard>
     </AuthLayout>
